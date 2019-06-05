@@ -1,0 +1,40 @@
+{
+  "pools": [
+    {
+      "name": "common_box",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:coal",
+          "weight": 4
+        },
+        {
+          "type": "item",
+          "name": "minecraft:nether_star",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "minecraft:emerald",
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "minecraft:deadbush",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 4
+            },
+            {
+              "function": "set_data",
+              "data": 0
+            }
+          ],
+          "weight": 5
+        }
+      ]
+    }
+  ]
+}
