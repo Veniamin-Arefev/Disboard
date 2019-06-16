@@ -5,18 +5,25 @@ package ru.veniamin_arefev.disboard.configs;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.ForgeHooks;
+import org.apache.logging.log4j.Level;
 import ru.veniamin_arefev.disboard.Disboard;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class Configs {
     private File configDir;
@@ -58,12 +65,39 @@ public class Configs {
 
     private void lootTablesCopy(){
         try {
+            String s  = Disboard.class.getResource("").toString();
+            s = s.substring(0,s.lastIndexOf("ru"))+"assets/disboard/loot_tables/boxes";
+            URI uri = URI.create(s);
             Path configPath = Paths.get(configDir.toURI());
-            Path defaultsPath = Paths.get(Disboard.class.getClassLoader().getResource("assets/disboard/loot_tables/boxes").toURI());
-            Files.walkFileTree(defaultsPath, new CopyFileVisitor(defaultsPath,configPath, StandardCopyOption.COPY_ATTRIBUTES));
-        } catch (Exception e) {
+            Path defaultsPath;
+            if (uri.getScheme().equals("jar")) {
+                FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
+                defaultsPath = fileSystem.getPath("/assets","disboard","loot_tables","boxes");
+            } else {
+                defaultsPath = Paths.get(uri);
+            }
+
+            Stream<Path> walk = Files.walk(defaultsPath, 1);
+            List<String> fileNames = NonNullList.create();
+            for (Iterator<Path> it = walk.iterator(); it.hasNext();){
+                String name = it.next().getFileName().toString();
+                if (name.contains(".json")){
+                    fileNames.add(name);
+                }
+            }
+
+            for(String fileName :fileNames){
+                try {
+                    Files.copy(this.getClass().getClassLoader().getResourceAsStream("assets/disboard/loot_tables/boxes/"+fileName),configPath.resolve(fileName));
+                } catch (FileAlreadyExistsException e){
+                    Disboard.logger.log(Level.ALL, fileName+" already exists");
+                }
+            }
+
+        } catch (IOException e) {
             if (!(e instanceof FileAlreadyExistsException)) {
-                Disboard.logger.error("Cant create default loot tables",e.fillInStackTrace());
+                Disboard.logger.error("Cant create default loot tables", e.fillInStackTrace());
+                Disboard.logger.error(e.getCause().getMessage());
             }
         }
     }
