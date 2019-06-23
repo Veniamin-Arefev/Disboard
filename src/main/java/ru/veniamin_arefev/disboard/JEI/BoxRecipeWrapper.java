@@ -28,6 +28,10 @@ public class BoxRecipeWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
 
     public BoxRecipeWrapper(ItemStack input) {
         this.input = input;
+        init();
+    }
+
+    public void init(){
         outputs = NonNullList.create();
         Item item = input.getItem();
         if (item instanceof Box) {

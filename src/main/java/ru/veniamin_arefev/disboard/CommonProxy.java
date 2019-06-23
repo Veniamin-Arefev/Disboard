@@ -5,6 +5,9 @@ package ru.veniamin_arefev.disboard;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.server.permission.DefaultPermissionLevel;
+import net.minecraftforge.server.permission.PermissionAPI;
+import ru.veniamin_arefev.disboard.configs.Configs;
 
 import static ru.veniamin_arefev.disboard.Disboard.configs;
 
@@ -14,8 +17,8 @@ public class CommonProxy {
      * The registry events below will have fired prior to entry to this method.
      */
     public void preInit(FMLPreInitializationEvent event) {
-//        MinecraftForge.EVENT_BUS.register(EventHandler.class);
         ItemsRegister.register();
+        configs = new Configs(event.getModConfigurationDirectory());
         configs.preInit();
     }
 
@@ -24,13 +27,13 @@ public class CommonProxy {
      */
     public void init(FMLInitializationEvent event) {
         configs.init();
+        PermissionAPI.registerNode("disboard.disboard.base", DefaultPermissionLevel.OP,"Base command permission");
     }
 
     /**
      * This is the final initialization event. Register actions from other mods here
      */
     public void postInit(FMLPostInitializationEvent event) {
-
 
     }
 }

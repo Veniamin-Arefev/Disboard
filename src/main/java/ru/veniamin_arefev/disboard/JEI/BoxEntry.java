@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class BoxEntry {
-//    private LootTableManager manager;
 
     public BoxEntry() {
     }

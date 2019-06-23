@@ -9,10 +9,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod.EventBusSubscriber
 public class EventHandler {
-    @SubscribeEvent
+    @SubscribeEvent() @SideOnly(Side.CLIENT)
     public static void preInitGUI(GuiScreenEvent.InitGuiEvent.Post event){
         if (event.getGui() instanceof GuiMultiplayer) {
             NonNullList<GuiButton> buttons= NonNullList.create();

@@ -10,7 +10,7 @@ import net.minecraft.util.text.TextFormatting;
 
 public abstract class Utility {
 
-    public static void anonsFromAllExceptPlayer(MinecraftServer server, EntityPlayer playerEx, ITextComponent text) {
+    public static void anonsForAllExceptPlayer(MinecraftServer server, EntityPlayer playerEx, ITextComponent text) {
         server.getPlayerList().getPlayers().forEach(entityPlayerMP -> {
             if (!entityPlayerMP.isEntityEqual(playerEx)){
                 entityPlayerMP.sendMessage(text);
@@ -22,7 +22,7 @@ public abstract class Utility {
         TextComponentString textComponents = new TextComponentString("[");
         textComponents.getStyle().setColor(TextFormatting.DARK_BLUE);
 
-        ITextComponent temp = new TextComponentString("HEXIND");
+        ITextComponent temp = new TextComponentString(Disboard.MOD_NAME.toUpperCase());
         temp.getStyle().setColor(TextFormatting.GOLD);
         textComponents.appendSibling(temp);
 
@@ -31,5 +31,4 @@ public abstract class Utility {
         textComponents.appendSibling(temp);
         return textComponents;
     }
-    
 }

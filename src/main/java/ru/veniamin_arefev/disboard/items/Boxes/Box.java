@@ -46,7 +46,7 @@ public abstract class Box extends Item {
             if (!stacks.isEmpty()) {
                 playerIn.getHeldItem(handIn).setCount(playerIn.getHeldItem(handIn).getCount() - 1);
                 playerIn.sendMessage(getMessageForOpener(stacks.get(0)));
-                Utility.anonsFromAllExceptPlayer(worldIn.getMinecraftServer(),playerIn,getMessageForOthers(playerIn.getName(),stacks.get(0)));
+                Utility.anonsForAllExceptPlayer(worldIn.getMinecraftServer(),playerIn,getMessageForOthers(playerIn.getName(),stacks.get(0)));
                 playerIn.dropItem(stacks.get(0), false);
             } else {
                 ITextComponent message = new TextComponentTranslation("boxes.box_drop.error");
@@ -61,13 +61,19 @@ public abstract class Box extends Item {
         temp.getStyle().setColor(TextFormatting.GREEN);
         textComponents.appendSibling(temp);
 
-        temp = new TextComponentTranslation("boxes."+name+".get_name");
+        textComponents.appendSibling(new TextComponentString(" "));
+
+        temp = new TextComponentTranslation("item."+name+".name");
         temp.getStyle().setColor(nameFormatting);
         textComponents.appendSibling(temp);
+
+        textComponents.appendSibling(new TextComponentString(" "));
 
         temp = new TextComponentTranslation("boxes.box_drop.and_got");
         temp.getStyle().setColor(TextFormatting.YELLOW);
         textComponents.appendSibling(temp);
+
+        textComponents.appendSibling(new TextComponentString(" "));
 
         temp = lootStack.getTextComponent();
         temp.getStyle().setColor(lootFormatting).setUnderlined(true);
@@ -82,17 +88,23 @@ public abstract class Box extends Item {
         temp.getStyle().setColor(TextFormatting.WHITE);
         textComponents.appendSibling(temp);
 
-        temp = new TextComponentTranslation("boxes.box_drop.opener.opened");
+        temp = new TextComponentTranslation("boxes.box_drop.other.opened");
         temp.getStyle().setColor(TextFormatting.GREEN);
         textComponents.appendSibling(temp);
 
-        temp = new TextComponentTranslation("boxes."+name+".get_name");
+        textComponents.appendSibling(new TextComponentString(" "));
+
+        temp = new TextComponentTranslation("item."+name+".name");
         temp.getStyle().setColor(nameFormatting);
         textComponents.appendSibling(temp);
+
+        textComponents.appendSibling(new TextComponentString(" "));
 
         temp = new TextComponentTranslation("boxes.box_drop.and_got");
         temp.getStyle().setColor(TextFormatting.YELLOW);
         textComponents.appendSibling(temp);
+
+        textComponents.appendSibling(new TextComponentString(" "));
 
         temp = lootStack.getTextComponent();
         temp.getStyle().setColor(lootFormatting).setUnderlined(true);

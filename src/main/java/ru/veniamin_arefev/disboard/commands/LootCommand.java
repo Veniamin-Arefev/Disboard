@@ -3,13 +3,20 @@ package ru.veniamin_arefev.disboard.commands;
 // Date was 08.05.2019
 
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.server.permission.PermissionAPI;
+import ru.veniamin_arefev.disboard.Disboard;
+import ru.veniamin_arefev.disboard.Utility;
 import ru.veniamin_arefev.disboard.configs.Configs;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LootCommand extends CommandBase {
@@ -17,18 +24,17 @@ public class LootCommand extends CommandBase {
 
     public LootCommand(){
         aliases = new ArrayList<>();
-//        aliases.add("dbloottable");
-//        aliases.add("dblt");
+        aliases.add("db");
     }
 
     @Override
     public List<String> getAliases() {
         return aliases;
     }
-    //base command
+
     @Override
     public String getName() {
-        return "loot_tables";
+        return Disboard.MOD_ID;
     }
 
     @Override
@@ -37,20 +43,46 @@ public class LootCommand extends CommandBase {
     }
 
     @Override
-    public void execute(MinecraftServer minecraftServer, ICommandSender iCommandSender, String[] strings) throws CommandException {
-        if (strings.length == 0) {
-            iCommandSender.sendMessage(new TextComponentString("Base command that do nothing)"));
-            return;
+    public void execute(MinecraftServer minecraftServer, ICommandSender iCommandSender, String[] args) {
+        if (args.length == 0) {
+            iCommandSender.sendMessage(new TextComponentString("Creator of this mod is Veniamin_arefev"));
         }
-        String action = strings[0];
-        if (action.equals("reload")){
-            Configs.reloadLootTables();
-            iCommandSender.sendMessage(new TextComponentString("Successfully reloaded loot tables"));
+        if (args.length > 0) {
+            if (args[0].equals("info" )){
+                iCommandSender.sendMessage(new TextComponentString("This is small for for Disboard servers"));
+                return;
+            }
+            if (args[0].equals("lootTables") &&args[1].equals("reload")) {
+                if (Configs.reloadLootTables()){
+                    TextComponentString textComponents = new TextComponentString("Successfully reloaded loot tables");
+                    textComponents.getStyle().setColor(TextFormatting.GREEN);
+                    iCommandSender.sendMessage(Utility.getModCaption().appendSibling(textComponents));
+                } else {
+                    TextComponentString textComponents = new TextComponentString("Failed to reload loot tables, see log files for more info");
+                    textComponents.getStyle().setColor(TextFormatting.RED);
+                    iCommandSender.sendMessage(Utility.getModCaption().appendSibling(textComponents));
+                }
+            }
+        }
+    }
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1) {
+            return getListOfStringsMatchingLastWord(args, "info", "lootTables");
+        } else if (args.length == 2 && "lootTables".equals(args[0])) {
+            return getListOfStringsMatchingLastWord(args, "reload");
+        } else {
+            return Collections.emptyList();
         }
     }
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
+        if (sender.getCommandSenderEntity() instanceof EntityPlayer){
+            return PermissionAPI.hasPermission((EntityPlayer) sender.getCommandSenderEntity(), "disboard.disboard.base");
+        } else {
+            return false;
+        }
     }
 }

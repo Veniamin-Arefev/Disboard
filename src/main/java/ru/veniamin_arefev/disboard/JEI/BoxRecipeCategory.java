@@ -18,7 +18,8 @@ import ru.veniamin_arefev.disboard.Disboard;
 
 import javax.annotation.Nullable;
 
-public class BoxRecipeCategory implements IRecipeCategory {
+public class
+BoxRecipeCategory implements IRecipeCategory {
     public static final String UID = Disboard.MOD_ID+"loot";
     private final IDrawable background;
     private final IDrawable icon;

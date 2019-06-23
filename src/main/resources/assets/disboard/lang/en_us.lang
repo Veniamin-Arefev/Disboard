@@ -1,4 +1,5 @@
 multiplayerGUI.join=Play on Disboard server
+boxes.box_drop_gui.title=Boxes loot
 
 itemGroup.Boxes_tab=Boxes tab
 
@@ -10,21 +11,20 @@ item.tools_box.name=Tools box
 item.crystal_box.name=Crystal box
 item.black_box.name=Black box
 
-boxes.common_box.get_name=Common box
-boxes.rare_box.get_name=Rare box
-boxes.epic_box.get_name=Epic box
-boxes.legendary_box.get_name=Legendary box
-boxes.tools_box.get_name=Tools box
-boxes.crystal_box.get_name=Crystal box
-
-boxes.box_drop.opener.opened=You just opened 
-boxes.box_drop.other.opened=just opened 
-boxes.box_drop.and_got= and got 
-boxes.box_drop.error=Error with loot generation for box, please contact administrator
+boxes.common_box.name=Common box
+boxes.rare_box.name=Rare box
+boxes.epic_box.name=Epic box
+boxes.legendary_box.name=Legendary box
+boxes.tools_box.name=Tools box
+boxes.crystal_box.name=Crystal box
+boxes.black_box.name=Black box
 
 item.error_item.name=Error item
 item.dragon_apple.name=Dragon apple
 item.set_tool.name=Set tool
 item.region_tool.name=Region tool
 
-boxes.box_drop_gui.title=Boxes loot
+boxes.box_drop.opener.opened=You just opened
+boxes.box_drop.other.opened=just opened
+boxes.box_drop.and_got=and got
+boxes.box_drop.error=Error with loot generation for box, please contact administrator

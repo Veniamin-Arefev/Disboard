@@ -19,13 +19,15 @@ import static ru.veniamin_arefev.disboard.configs.Configs.lootTablesNames;
 
 @JEIPlugin
 public class JEIPluginHexInd implements IModPlugin {
+    public static NonNullList<BoxRecipeWrapper> recipes = null;
+
     @Override
     public void register(IModRegistry registry) {
         NonNullList<ItemStack> boxes = NonNullList.create();
         for (String name : lootTablesNames) {
             boxes.add(new ItemStack(Objects.requireNonNull(Item.getByNameOrId(Disboard.MOD_ID + ":"+name.substring(0,name.indexOf(".")))),1));
         }
-        NonNullList<BoxRecipeWrapper> recipes = NonNullList.create();
+        recipes = NonNullList.create();
         boxes.forEach(itemStack -> recipes.add(new BoxRecipeWrapper(itemStack)));
         registry.addRecipes(recipes, BoxRecipeCategory.UID);
     }

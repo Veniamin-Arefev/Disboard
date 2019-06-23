@@ -13,6 +13,8 @@ import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.ForgeHooks;
 import org.apache.logging.log4j.Level;
 import ru.veniamin_arefev.disboard.Disboard;
+import ru.veniamin_arefev.disboard.JEI.BoxRecipeWrapper;
+import ru.veniamin_arefev.disboard.JEI.JEIPluginHexInd;
 
 import java.io.File;
 import java.io.IOException;
@@ -90,14 +92,13 @@ public class Configs {
                 try {
                     Files.copy(this.getClass().getClassLoader().getResourceAsStream("assets/disboard/loot_tables/boxes/"+fileName),configPath.resolve(fileName));
                 } catch (FileAlreadyExistsException e){
-                    Disboard.logger.log(Level.ALL, fileName+" already exists");
+                    Disboard.logger.log(Level.DEBUG, fileName+" already exists");
                 }
             }
 
         } catch (IOException e) {
             if (!(e instanceof FileAlreadyExistsException)) {
                 Disboard.logger.error("Cant create default loot tables", e.fillInStackTrace());
-                Disboard.logger.error(e.getCause().getMessage());
             }
         }
     }
@@ -113,7 +114,7 @@ public class Configs {
         reloadLootTables();
     }
 
-    public static void reloadLootTables(){
+    public static boolean reloadLootTables(){
         lootTables.clear();
         try {
             LootTableManager manager = new LootTableManager(File.createTempFile("disboard", "temp"));
@@ -121,8 +122,13 @@ public class Configs {
                 String data = com.google.common.io.Files.toString(file, StandardCharsets.UTF_8);
                 lootTables.add(ForgeHooks.loadLootTable(GSON_INSTANCE, new ResourceLocation(file.getName()), data, true, manager));
             }
+            if (JEIPluginHexInd.recipes != null && !JEIPluginHexInd.recipes.isEmpty()) {
+                JEIPluginHexInd.recipes.forEach(BoxRecipeWrapper::init);
+            }
+            return true;
         } catch (IOException e) {
             Disboard.logger.error("Error occupied during reloading loot tables",e.fillInStackTrace());
+            return false;
         }
     }
 }
