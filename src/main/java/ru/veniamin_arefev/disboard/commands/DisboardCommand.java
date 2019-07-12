@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class LootCommand extends CommandBase {
+public class DisboardCommand extends CommandBase {
     private final ArrayList<String> aliases;
 
-    public LootCommand(){
+    public DisboardCommand(){
         aliases = new ArrayList<>();
         aliases.add("db");
     }
@@ -49,7 +49,7 @@ public class LootCommand extends CommandBase {
         }
         if (args.length > 0) {
             if (args[0].equals("info" )){
-                iCommandSender.sendMessage(new TextComponentString("This is small for for Disboard servers"));
+                iCommandSender.sendMessage(new TextComponentString("This is small mod for for Disboard servers"));
                 return;
             }
             if (args[0].equals("lootTables") &&args[1].equals("reload")) {

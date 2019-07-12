@@ -41,32 +41,31 @@ public class BoxEntry {
                             float chance = lootEntry.getEffectiveWeight(0) / totalWeight1;
                             int count = 1;
                             int meta = 0;
-                            LootFunction[] functions = getFunctions((LootEntryItem) lootEntry);
+                            LootFunction[] functions = ((LootEntryItem) lootEntry).functions;
                             for (LootFunction function : functions) {
                                 if (function instanceof SetCount) {
                                     try {
-                                        RandomValueRange valueRange = ReflectionHelper.getPrivateValue(SetCount.class, ((SetCount) function), "countRange");
-                                        count = MathHelper.floor(valueRange.getMin());
+                                        count = MathHelper.floor(((SetCount) function).countRange.getMin());
                                     } catch (Exception e) {
                                         Disboard.logger.error(e);
                                     }
                                 }
                                 if (function instanceof SetMetadata) {
                                     try {
-                                        RandomValueRange valueRange = ReflectionHelper.getPrivateValue(SetMetadata.class, ((SetMetadata) function), "metaRange");
-                                        meta = MathHelper.floor(valueRange.getMin());
+                                        meta = MathHelper.floor(((SetMetadata) function).metaRange.getMin());
                                     } catch (Exception e) {
                                         Disboard.logger.error(e);
                                     }
                                 }
                             }
                             try {
-                                Item item = ReflectionHelper.getPrivateValue(LootEntryItem.class, (LootEntryItem) lootEntry, "item");
+                                Item item = ((LootEntryItem)  lootEntry).item;
                                 drops.add(new DropItem(new ItemStack((item), count, meta), chance));
 
                             } catch (Exception e){
                                 String patchedItemName = lootEntry.getEntryName().substring(0,lootEntry.getEntryName().indexOf('#'));
                                 ItemStack itemStack = new ItemStack(Item.getByNameOrId(Disboard.MOD_ID+":error_item"),count).setStackDisplayName("id = "+patchedItemName+" : meta is"+meta);
+                                drops.add(new DropItem(itemStack, chance));
                                 Disboard.logger.error("Invalid item in loot table - "+lootEntry.getEntryName());
                                 Disboard.logger.error(e);
                             }
@@ -86,11 +85,6 @@ public class BoxEntry {
     private static List<LootEntry> getEntries(LootPool pool) {
         return ReflectionHelper.getPrivateValue(LootPool.class, pool, "lootEntries", "field_186453_a");
     }
-
-    private static LootFunction[] getFunctions(LootEntryItem lootEntry) {
-        return ReflectionHelper.getPrivateValue(LootEntryItem.class, lootEntry, "functions", "field_186369_b");
-    }
-
 
     public static class DropItem{
         private ItemStack itemStack;

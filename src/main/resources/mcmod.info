@@ -2,13 +2,13 @@
     {
         "modid": "Disboard",
         "name": "Disboard",
-        "description": "",
+        "description": "This mod brings few items and a lot of misc staff.",
         "version": "${version}",
         "mcversion": "${mcversion}",
-        "url": "",
+        "url": "disboard.su",
         "updateUrl": "",
-        "authorList": [],
-        "credits": "",
+        "authorList": ["Veniamin_arefev"],
+        "credits": "Thank all my friend at Forge community for helping",
         "logoFile": "",
         "screenshots": [],
         "dependencies": []

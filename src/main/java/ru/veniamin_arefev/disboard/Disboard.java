@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
-import ru.veniamin_arefev.disboard.commands.LootCommand;
+import ru.veniamin_arefev.disboard.commands.DisboardCommand;
 import ru.veniamin_arefev.disboard.configs.Configs;
 
 @Mod(
@@ -20,7 +20,7 @@ public class Disboard {
 
     public static final String MOD_ID = "disboard";
     public static final String MOD_NAME = "Disboard";
-    public static final String VERSION = "0.400-RELEASE";
+    public static final String VERSION = "0.500-RELEASE";
 
     public static Logger logger;
     public static Configs configs;
@@ -55,6 +55,6 @@ public class Disboard {
 
     @Mod.EventHandler
     public static void serverLoading(FMLServerStartingEvent event) {
-        event.registerServerCommand(new LootCommand());
+        event.registerServerCommand(new DisboardCommand());
     }
 }

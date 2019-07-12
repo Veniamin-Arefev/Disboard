@@ -34,9 +34,8 @@ public class BoxRecipeWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     public void init(){
         outputs = NonNullList.create();
         Item item = input.getItem();
-        if (item instanceof Box) {
-            fillOutputs(Configs.lootTables.get(((Box) item).ID));
-        }
+        assert item instanceof Box;
+        fillOutputs(Configs.lootTables.get(((Box) item).ID));
     }
 
     @Override
