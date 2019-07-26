@@ -1,5 +1,8 @@
 multiplayerGUI.join=Играть на сервере Disboard
-boxes.box_drop_gui.title=Лут с коробочек
+jei.box_drop_gui.title=Лут с коробочек
+jei.box_drop_gui.rmb=Открытие правой кнопкой мыши
+jei.box_drop_gui.next=Cледующие
+jei.box_drop_gui.previous=Предыдущие
 
 itemGroup.Boxes_tab=Коробочки
 

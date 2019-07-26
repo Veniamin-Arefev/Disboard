@@ -6,12 +6,14 @@ package ru.veniamin_arefev.disboard.JEI;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraft.world.storage.loot.functions.SetMetadata;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import ru.veniamin_arefev.disboard.Disboard;
+import ru.veniamin_arefev.disboard.loot_functions.SetCustomName;
 
 import java.util.List;
 import java.util.Set;
@@ -21,14 +23,14 @@ public class BoxEntry {
 
     public BoxEntry() {
     }
-    public static Set<DropItem> parseLootTable(LootTable table){
+
+    public static Set<DropItem> parseLootTable(LootTable table) {
         Set<DropItem> drops = new TreeSet<>((dr1, dr2) -> {
-            if (dr1.getDropChance() < dr2.getDropChance()){
+            if (dr1.getDropChance() < dr2.getDropChance()) {
                 return 1;
-            } else if (dr1.getDropChance() == dr2.getDropChance()){
+            } else if (dr1.getDropChance() == dr2.getDropChance()) {
                 return 0;
-            }
-            else return -1;
+            } else return -1;
         });
         if (table == null) {
             Disboard.logger.error("FUCKING LOOT TABLE DOESNT DO THEIR WORK");
@@ -41,8 +43,17 @@ public class BoxEntry {
                             float chance = lootEntry.getEffectiveWeight(0) / totalWeight1;
                             int count = 1;
                             int meta = 0;
+                            String name = null;
+                            TextFormatting color = TextFormatting.WHITE;
                             LootFunction[] functions = ((LootEntryItem) lootEntry).functions;
                             for (LootFunction function : functions) {
+                                if (function instanceof SetCustomName) {
+                                    try {
+                                        name = ((SetCustomName) function).customName;
+                                    } catch (Exception e) {
+                                        Disboard.logger.error(e);
+                                    }
+                                }
                                 if (function instanceof SetCount) {
                                     try {
                                         count = MathHelper.floor(((SetCount) function).countRange.getMin());
@@ -59,20 +70,25 @@ public class BoxEntry {
                                 }
                             }
                             try {
-                                Item item = ((LootEntryItem)  lootEntry).item;
-                                drops.add(new DropItem(new ItemStack((item), count, meta), chance));
-
-                            } catch (Exception e){
-                                String patchedItemName = lootEntry.getEntryName().substring(0,lootEntry.getEntryName().indexOf('#'));
-                                ItemStack itemStack = new ItemStack(Item.getByNameOrId(Disboard.MOD_ID+":error_item"),count).setStackDisplayName("id = "+patchedItemName+" : meta is"+meta);
+                                ItemStack itemStack = new ItemStack(((LootEntryItem) lootEntry).item, count, meta);
+                                if (name != null) {
+                                    itemStack.setStackDisplayName(name);
+                                    itemStack.getTextComponent().getStyle().setItalic(false);
+                                }
+                                itemStack.getTextComponent().getStyle().setColor(color);
                                 drops.add(new DropItem(itemStack, chance));
-                                Disboard.logger.error("Invalid item in loot table - "+lootEntry.getEntryName());
+
+                            } catch (Exception e) {
+                                String patchedItemName = lootEntry.getEntryName().substring(0, lootEntry.getEntryName().indexOf('#'));
+                                ItemStack itemStack = new ItemStack(Item.getByNameOrId(Disboard.MOD_ID + ":error_item"), count).setStackDisplayName("id = " + patchedItemName + " : meta is" + meta);
+                                drops.add(new DropItem(itemStack, chance));
+                                Disboard.logger.error("Invalid item in loot table - " + lootEntry.getEntryName());
                                 Disboard.logger.error(e);
                             }
                         }
                     }));
-        } catch (Exception e){
-            Disboard.logger.error("Failed to load loot table. Is it empty - "+getPools(table).isEmpty());
+        } catch (Exception e) {
+            Disboard.logger.error("Failed to load loot table. Is it empty - " + getPools(table).isEmpty());
             Disboard.logger.error(e);
         }
         return drops;
@@ -86,16 +102,19 @@ public class BoxEntry {
         return ReflectionHelper.getPrivateValue(LootPool.class, pool, "lootEntries", "field_186453_a");
     }
 
-    public static class DropItem{
+    public static class DropItem {
         private ItemStack itemStack;
         private float dropChance;
+
         public DropItem(ItemStack itemStack, float dropChance) {
             this.itemStack = itemStack;
             this.dropChance = dropChance;
         }
+
         public ItemStack getItemStack() {
             return itemStack;
         }
+
         public Float getDropChance() {
             return dropChance;
         }

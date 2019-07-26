@@ -7,39 +7,13 @@
         {
           "type": "item",
           "name": "minecraft:coal",
+          "functions": [
+            {
+              "function": "set_custom_name",
+              "name": "§6D§ci§lnosaur ash"
+            }
+          ],
           "weight": 4
-        },
-        {
-          "type": "item",
-          "name": "thermalfoundation:material",
-          "entryName": "thermalfoundation:material",
-          "functions": [
-            {
-              "function": "set_count",
-              "count": 4
-            },
-            {
-              "function": "set_data",
-              "data": 165
-            }
-          ],
-          "weight": 2
-        },
-        {
-          "type": "item",
-          "name": "thermalfoundation:material",
-          "entryName": "thermalfoundation:material#0",
-          "functions": [
-            {
-              "function": "set_count",
-              "count": 4
-            },
-            {
-              "function": "set_data",
-              "data": 167
-            }
-          ],
-          "weight": 2
         },
         {
           "type": "item",

@@ -1,5 +1,8 @@
 multiplayerGUI.join=Play on Disboard server
-boxes.box_drop_gui.title=Boxes loot
+jei.box_drop_gui.title=Boxes loot
+jei.box_drop_gui.rmb=Right click opening
+jei.box_drop_gui.next=Next
+jei.box_drop_gui.previous=Previous
 
 itemGroup.Boxes_tab=Boxes tab
 

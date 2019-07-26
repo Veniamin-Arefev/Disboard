@@ -12,23 +12,31 @@ import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
 import ru.veniamin_arefev.disboard.Disboard;
 
 import javax.annotation.Nullable;
 
-public class
-BoxRecipeCategory implements IRecipeCategory {
-    public static final String UID = Disboard.MOD_ID+"loot";
+public class BoxRecipeCategory implements IRecipeCategory {
+    public static final String UID = Disboard.MOD_ID + ".loot";
     private final IDrawable background;
     private final IDrawable icon;
+    public static IDrawable iconNext;
+    public static IDrawable iconPrevious;
+
+    private final int guiWidth = 183;
+    private final int guiHeight = 124;
 
     public BoxRecipeCategory(IGuiHelper guiHelper) {
         background = guiHelper.createDrawable(new ResourceLocation(Disboard.MOD_ID,
-                "gui/box_drops_gui.png"), 0, 0, 164, 127);
+                "gui/box_drops_gui.png"), 0, 0, guiWidth, guiHeight);
         icon = guiHelper.createDrawable(new ResourceLocation(Disboard.MOD_ID,
-                "gui/box_drops_icon.png"), 0, 0, 16, 16);
+                "gui/box_drops_gui.png"), 184, 32, 16, 16);
+        iconNext = guiHelper.createDrawable(new ResourceLocation(Disboard.MOD_ID,
+                "gui/box_drops_gui.png"), 184, 0, 16, 16);
+        iconPrevious = guiHelper.createDrawable(new ResourceLocation(Disboard.MOD_ID,
+                "gui/box_drops_gui.png"), 184, 16, 16, 16);
     }
 
     @Nullable
@@ -44,7 +52,7 @@ BoxRecipeCategory implements IRecipeCategory {
 
     @Override
     public String getTitle() {
-        return new TextComponentTranslation("boxes.box_drop_gui.title").getFormattedText();
+        return I18n.format("jei.box_drop_gui.title");
     }
 
     @Override
@@ -59,30 +67,28 @@ BoxRecipeCategory implements IRecipeCategory {
 
     @Override
     public void drawExtras(Minecraft minecraft) {
-/*        // Любые надписи, которые будут на каждом рецепте.
-        // Все координаты идут относительно самого рецепта. Все width и height рассчитывать не нужно.
-        minecraft.fontRenderer.drawString("Block drops:", 5, 13, 0xffffffff, true);
-*/
+        minecraft.fontRenderer.drawSplitString(I18n.format("jei.box_drop_gui.rmb"), 10, 10, 70, 0xffffffff);
     }
 
     @Override
-    public void setRecipe( IRecipeLayout layout, IRecipeWrapper wrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout layout, IRecipeWrapper wrapper, IIngredients ingredients) {
         IGuiItemStackGroup isg = layout.getItemStacks();
-        isg.init(0, true, 74, 2);
+        ((BoxRecipeWrapper) wrapper).isg = layout.getItemStacks();
+        isg.init(0, true, 83, 3);
         isg.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0).get(0));
 
-        int x = 1;
-        int y = 46;
+        int x = 2;
+        int y = 49;
 
-        for(int i = 1; i < Math.min(50, ingredients.getOutputs(VanillaTypes.ITEM).size())+1; i++) {
+        for (int i = 1; i <= 40; i++) {
             isg.init(i, false, x, y);
-            x+= 16;
-            if(x >= 1+16*10) {
-                x = 1;
-                y+= 16;
+            x += 18;
+            if (x >= guiWidth - 16) {
+                x = 2;
+                y += 18;
             }
         }
-        for(int i = 1; i < Math.min(50, ingredients.getOutputs(VanillaTypes.ITEM).size())+1; i++)
+        for (int i = 1; i < Math.min(40, ingredients.getOutputs(VanillaTypes.ITEM).size()) + 1; i++)
             isg.set(i, ingredients.getOutputs(VanillaTypes.ITEM).get(i - 1));
         isg.addTooltipCallback((BoxRecipeWrapper) wrapper);
     }

@@ -18,7 +18,7 @@ import java.util.Objects;
 import static ru.veniamin_arefev.disboard.configs.Configs.lootTablesNames;
 
 @JEIPlugin
-public class JEIPluginHexInd implements IModPlugin {
+public class JEIPluginDisboard implements IModPlugin {
     public static NonNullList<BoxRecipeWrapper> recipes = null;
 
     @Override
@@ -30,6 +30,7 @@ public class JEIPluginHexInd implements IModPlugin {
         recipes = NonNullList.create();
         boxes.forEach(itemStack -> recipes.add(new BoxRecipeWrapper(itemStack)));
         registry.addRecipes(recipes, BoxRecipeCategory.UID);
+        registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(Objects.requireNonNull(Item.getByNameOrId("disboard:error_item"))));
     }
 
     @Override
