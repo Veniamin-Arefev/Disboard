@@ -11,24 +11,24 @@ import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Level;
 import ru.veniamin_arefev.disboard.Disboard;
 import ru.veniamin_arefev.disboard.JEI.BoxRecipeWrapper;
 import ru.veniamin_arefev.disboard.JEI.JEIPluginDisboard;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Configs {
-    private File configDir;
+    private static File configDir;
     private static final Gson GSON_INSTANCE = (new GsonBuilder()).registerTypeAdapter(RandomValueRange.class, new RandomValueRange.Serializer()).registerTypeAdapter(LootPool.class, new net.minecraft.world.storage.loot.LootPool.Serializer()).registerTypeAdapter(LootTable.class, new net.minecraft.world.storage.loot.LootTable.Serializer()).registerTypeHierarchyAdapter(LootEntry.class, new net.minecraft.world.storage.loot.LootEntry.Serializer()).registerTypeHierarchyAdapter(LootFunction.class, new net.minecraft.world.storage.loot.functions.LootFunctionManager.Serializer()).registerTypeHierarchyAdapter(LootCondition.class, new net.minecraft.world.storage.loot.conditions.LootConditionManager.Serializer()).registerTypeHierarchyAdapter(LootContext.EntityTarget.class, new net.minecraft.world.storage.loot.LootContext.EntityTarget.Serializer()).create();
     public static final ArrayList<String> lootTablesNames = Lists.newArrayList(
             "common_box.json", //start with 0
@@ -41,12 +41,38 @@ public class Configs {
     );
     private static ArrayList<File> filesList = Lists.newArrayList();
     public static ArrayList<LootTable> lootTables = Lists.newArrayList();
+    public static Side side;
+    public static Properties properties;
 
 
-
-    public Configs(File configDir) {
+    public Configs(File configDir, Side side) {
+        this.side = side;
         this.configDir = new File(configDir,"disboard");
+        dealWithProperties(configDir);
+    }
 
+    private void dealWithProperties(File configDir) {
+        File propFile = new File(configDir, "disboard.properties");
+        Properties defaults = new Properties();
+        defaults.setProperty("UUID", "");
+        properties = new Properties(defaults);
+
+        if (propFile.exists()) {
+            try {
+                properties.load(new FileInputStream(propFile));
+            } catch (IOException e) {
+                Disboard.logger.error("Cant load properties file");
+                Disboard.logger.error(e);
+            }
+        } else {
+            properties.setProperty("UUID", UUID.randomUUID().toString());
+            try {
+                properties.store(new FileOutputStream(propFile), "DON'T TOUCH THIS");
+            } catch (IOException e) {
+                Disboard.logger.error("Cant save properties file");
+                Disboard.logger.error(e);
+            }
+        }
     }
 
     public void preInit(){
@@ -103,7 +129,7 @@ public class Configs {
         }
     }
 
-    private void writeFileList(){
+    private static void writeFileList() {
         filesList.clear();
         for (String name : lootTablesNames) {
             filesList.add(new File(configDir,name));

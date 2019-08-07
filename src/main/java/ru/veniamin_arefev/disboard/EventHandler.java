@@ -5,16 +5,21 @@ package ru.veniamin_arefev.disboard;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import ru.veniamin_arefev.disboard.packets.Message;
 
 @Mod.EventBusSubscriber
 public class EventHandler {
-    @SubscribeEvent() @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public static void preInitGUI(GuiScreenEvent.InitGuiEvent.Post event){
         if (event.getGui() instanceof GuiMultiplayer) {
             NonNullList<GuiButton> buttons= NonNullList.create();
@@ -31,6 +36,16 @@ public class EventHandler {
                 }
             }
             event.getButtonList().removeAll(buttons);
+        }
+    }
+
+    @SubscribeEvent
+    public static void OnItemRightClick(PlayerInteractEvent.RightClickItem event) {
+        if (event.getSide().isServer()) {
+            if (event.getItemStack().isItemEqual(new ItemStack(Items.STICK))) {
+                CommonProxy.myChannel.sendToAll(new Message(1, "123"));
+//                CommonProxy.networkWrapper.sendTo(new Message(1,event.getItemStack().getCount()), (EntityPlayerMP) event.getEntityPlayer());
+            }
         }
     }
 }

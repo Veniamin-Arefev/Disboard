@@ -90,11 +90,6 @@ public class DisboardCommand extends CommandBase {
                 }
                 return;
             }
-            if (args.length == 2 && args[0].equals("lootTables") && args[1].equals("sync")) {
-                if (iCommandSender.canUseCommand(4, "disboard.disboard.sync")) {
-                    //do staff
-                }
-            }
             iCommandSender.sendMessage(wrongUsage());
         }
     }
@@ -113,7 +108,6 @@ public class DisboardCommand extends CommandBase {
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
         sender.canUseCommand(0, "disboard.disboard.info"); //sponge can understand what permissions are in mod
-        sender.canUseCommand(0, "disboard.disboard.sync");
         sender.canUseCommand(4, "disboard.disboard.reload");
         return sender.canUseCommand(0, "disboard.disboard.base");
     }
