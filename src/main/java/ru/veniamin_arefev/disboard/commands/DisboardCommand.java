@@ -9,9 +9,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import ru.veniamin_arefev.disboard.CommonProxy;
 import ru.veniamin_arefev.disboard.Disboard;
 import ru.veniamin_arefev.disboard.Utility;
 import ru.veniamin_arefev.disboard.configs.Configs;
+import ru.veniamin_arefev.disboard.packets.AskClientForUpdateDataMessage;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -23,7 +25,6 @@ public class DisboardCommand extends CommandBase {
 
     public DisboardCommand() {
         aliases = new ArrayList<>();
-//        aliases.add("db");
     }
 
     @Override
@@ -41,13 +42,13 @@ public class DisboardCommand extends CommandBase {
         return "disboard <subject> <action>";
     }
 
-    private ITextComponent wrongUsage(){
+    private ITextComponent wrongUsage() {
         TextComponentString string = new TextComponentString("Wrong command usage, must be /disboard <subject> <action>");
         string.getStyle().setColor(TextFormatting.RED);
         return Utility.getModCaption().appendSibling(string);
     }
 
-    private ITextComponent haventPermission(){
+    private ITextComponent haventPermission() {
         TextComponentString string = new TextComponentString("You don't have permission to run this command. Told administrator about them if this is error");
         string.getStyle().setColor(TextFormatting.RED);
         return Utility.getModCaption().appendSibling(string);
@@ -68,8 +69,7 @@ public class DisboardCommand extends CommandBase {
                     string = new TextComponentString("Creator of this mod is Veniamin_arefev");
                     string.getStyle().setColor(TextFormatting.AQUA);
                     iCommandSender.sendMessage(Utility.getModCaption().appendSibling(string));
-                }
-                else {
+                } else {
                     iCommandSender.sendMessage(haventPermission());
                 }
                 return;
@@ -77,7 +77,13 @@ public class DisboardCommand extends CommandBase {
             if (args.length == 2 && args[0].equals("lootTables") && args[1].equals("reload")) {
                 if (iCommandSender.canUseCommand(4, "disboard.disboard.reload")) {
                     if (Configs.reloadLootTables()) {
-                        TextComponentString textComponents = new TextComponentString("Successfully reloaded loot tables");
+                        TextComponentString textComponents;
+                        if (minecraftServer.isDedicatedServer()) {
+                            textComponents = new TextComponentString("Successfully reloaded loot tables on server, sending them to clients...");
+                            CommonProxy.myChannel.sendToAll(new AskClientForUpdateDataMessage());
+                        } else {
+                            textComponents = new TextComponentString("Successfully reloaded loot tables");
+                        }
                         textComponents.getStyle().setColor(TextFormatting.GREEN);
                         iCommandSender.sendMessage(Utility.getModCaption().appendSibling(textComponents));
                     } else {

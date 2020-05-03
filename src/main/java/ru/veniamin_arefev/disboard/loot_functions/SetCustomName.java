@@ -30,7 +30,7 @@ public class SetCustomName extends LootFunction {
 
     public static class Serializer extends net.minecraft.world.storage.loot.functions.LootFunction.Serializer<SetCustomName> {
         public Serializer() {
-            super(new ResourceLocation("set_customName"), SetCustomName.class);
+            super(new ResourceLocation("set_custom_name"), SetCustomName.class);
         }
 
         public void serialize(JsonObject object, SetCustomName functionClazz, JsonSerializationContext serializationContext) {

@@ -27,11 +27,11 @@ import static ru.veniamin_arefev.disboard.JEI.BoxRecipeCategory.iconNext;
 import static ru.veniamin_arefev.disboard.JEI.BoxRecipeCategory.iconPrevious;
 
 public class BoxRecipeWrapper implements IRecipeWrapper, ITooltipCallback<ItemStack> {
+    public IGuiItemStackGroup isg;
     private ItemStack input;
     private NonNullList<ItemStack> outputs;
     private Set<BoxEntry.DropItem> dropItemSet;
     private int currentIndexOfFirstItem = 0;
-    public IGuiItemStackGroup isg;
 
     public BoxRecipeWrapper(ItemStack input) {
         this.input = input;
@@ -59,8 +59,8 @@ public class BoxRecipeWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         if (outputs.size() > 40) {
-            iconNext.draw(minecraft, 130, 5);
-            iconPrevious.draw(minecraft, 130, 22);
+            iconNext.draw(minecraft, 130, 22);
+            iconPrevious.draw(minecraft, 130, 5);
         }
     }
 
@@ -69,7 +69,7 @@ public class BoxRecipeWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
         if (outputs.size() <= 40) {
             return false;
         } else {
-            if (mouseX > 130 && mouseX < 146 && mouseY > 5 && mouseY < 21) { //Next
+            if (mouseX > 130 && mouseX < 146 && mouseY > 22 && mouseY < 38) { //Previous
                 if (outputs.size() > currentIndexOfFirstItem + 40) {
                     currentIndexOfFirstItem += 10;
                     for (int i = 1; i <= 40; i++) {
@@ -82,7 +82,7 @@ public class BoxRecipeWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
                 }
                 return true;
             }
-            if (mouseX > 130 && mouseX < 146 && mouseY > 22 && mouseY < 38) { //Previous
+            if (mouseX > 130 && mouseX < 146 && mouseY > 5 && mouseY < 21) { //Next
                 if (currentIndexOfFirstItem >= 10) {
                     currentIndexOfFirstItem -= 10;
                     for (int i = 1; i <= 40; i++)
@@ -97,20 +97,15 @@ public class BoxRecipeWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     @Override
     public void onTooltip(int slotIndex, boolean input, ItemStack ingredient, List<String> tooltip) {
         tooltip.add((float) (MathHelper.floor(((BoxEntry.DropItem) dropItemSet.toArray()[slotIndex - 1 + currentIndexOfFirstItem]).getDropChance() * 1000)) / 10 + " %");
-//        dropItemSet.iterator().forEachRemaining(dropItem -> {
-//            if (dropItem.getItemStack().isItemEqual(ingredient)) {
-//                tooltip.add((float) (MathHelper.floor(dropItem.getDropChance() * 1000)) / 10 + " %");
-//            }
-//        });
     }
 
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
         if (outputs.size() > 40) {
-            if (mouseX > 130 && mouseX < 146 && mouseY > 5 && mouseY < 21) {
+            if (mouseX > 130 && mouseX < 146 && mouseY > 22 && mouseY < 38) {
                 return Collections.singletonList(I18n.format("jei.box_drop_gui.next"));
             }
-            if (mouseX > 130 && mouseX < 146 && mouseY > 22 && mouseY < 38) {
+            if (mouseX > 130 && mouseX < 146 && mouseY > 5 && mouseY < 21) {
                 return Collections.singletonList(I18n.format("jei.box_drop_gui.previous"));
             }
         }

@@ -20,11 +20,10 @@ import javax.annotation.Nullable;
 
 public class BoxRecipeCategory implements IRecipeCategory {
     public static final String UID = Disboard.MOD_ID + ".loot";
-    private final IDrawable background;
-    private final IDrawable icon;
     public static IDrawable iconNext;
     public static IDrawable iconPrevious;
-
+    private final IDrawable background;
+    private final IDrawable icon;
     private final int guiWidth = 183;
     private final int guiHeight = 124;
 
@@ -67,7 +66,7 @@ public class BoxRecipeCategory implements IRecipeCategory {
 
     @Override
     public void drawExtras(Minecraft minecraft) {
-        minecraft.fontRenderer.drawSplitString(I18n.format("jei.box_drop_gui.rmb"), 10, 10, 70, 0xffffffff);
+        minecraft.fontRenderer.drawSplitString(I18n.format("jei.box_drop_gui.rmb"), 12, 15, 70, 0xffffffff);
     }
 
     @Override

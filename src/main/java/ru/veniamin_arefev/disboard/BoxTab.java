@@ -15,7 +15,7 @@ public class BoxTab extends CreativeTabs {
 
     @Override
     public ItemStack createIcon() {
-        return new ItemStack(Items.DIAMOND,1);
+        return new ItemStack(Items.DIAMOND, 1);
     }
 
 }

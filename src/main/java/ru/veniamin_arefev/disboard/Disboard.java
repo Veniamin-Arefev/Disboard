@@ -1,11 +1,11 @@
 package ru.veniamin_arefev.disboard;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
 import ru.veniamin_arefev.disboard.commands.DisboardCommand;
@@ -20,18 +20,20 @@ public class Disboard {
 
     public static final String MOD_ID = "disboard";
     public static final String MOD_NAME = "Disboard";
-    public static final String VERSION = "0.575-RELEASE";
-
+    public static final String VERSION = "1.000-RELEASE";
+    public static final CreativeTabs boxTab = new BoxTab("Boxes_tab");
     public static Logger logger;
     public static Configs configs;
-
     @Mod.Instance(MOD_ID)
     public static Disboard INSTANCE;
-
-    public static final CreativeTabs boxTab  = new BoxTab("Boxes_tab");
-
     @SidedProxy(clientSide = "ru.veniamin_arefev.disboard.ClientProxy", serverSide = "ru.veniamin_arefev.disboard.CommonProxy")
     public static CommonProxy proxy;
+
+    @Mod.EventHandler
+    public static void serverLoading(FMLServerStartingEvent event) { //server starting only
+        event.registerServerCommand(new DisboardCommand());
+        configs.initOnServerStart();
+    }
 
     /**
      * This is the first initialization event. Register tile entities here.
@@ -51,10 +53,5 @@ public class Disboard {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-    }
-
-    @Mod.EventHandler
-    public static void serverLoading(FMLServerStartingEvent event) {
-        event.registerServerCommand(new DisboardCommand());
     }
 }

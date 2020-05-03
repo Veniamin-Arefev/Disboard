@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 public class Epic_box extends Box {
     public Epic_box(String name) {
-        super(name, 3, TextFormatting.DARK_PURPLE, TextFormatting.DARK_RED);
+        super(name, 2, TextFormatting.DARK_PURPLE, TextFormatting.DARK_RED);
     }
 
     @Override

@@ -7,32 +7,62 @@
         {
           "type": "item",
           "name": "minecraft:coal",
-          "weight": 4
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 64
+            }
+          ],
+          "weight": 100
         },
         {
           "type": "item",
-          "name": "minecraft:nether_star",
-          "weight": 1
+          "name": "minecraft:iron_ingot",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 32
+            }
+          ],
+          "weight": 50
+        },
+        {
+          "type": "item",
+          "name": "minecraft:gold_ingot",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 16
+            }
+          ],
+          "weight": 25
+        },
+        {
+          "type": "item",
+          "name": "minecraft:diamond",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 8
+            }
+          ],
+          "weight": 10
         },
         {
           "type": "item",
           "name": "minecraft:emerald",
-          "weight": 1
-        },
-        {
-          "type": "item",
-          "name": "minecraft:deadbush",
           "functions": [
             {
               "function": "set_count",
-              "count": 4
-            },
-            {
-              "function": "set_data",
-              "data": 0
+              "count": 8
             }
           ],
-          "weight": 5
+          "weight": 10
+        },
+        {
+          "type": "item",
+          "name": "minecraft:nether_star",
+          "weight": 2
         }
       ]
     }

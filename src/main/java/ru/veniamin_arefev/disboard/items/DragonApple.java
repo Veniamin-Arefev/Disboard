@@ -15,7 +15,7 @@ public class DragonApple extends ItemFood {
     public DragonApple(int amount, float saturation, boolean isWolfFood, String name) {
         super(amount, saturation, isWolfFood);
         setAlwaysEdible();
-        setPotionEffect(new PotionEffect(Objects.requireNonNull(Potion.getPotionById(11)),20*20,5),1F);
+        setPotionEffect(new PotionEffect(Objects.requireNonNull(Potion.getPotionById(11)), 30 * 20, 5), 1F);
         setRegistryName(Disboard.MOD_ID, name);
         setTranslationKey(name);
         setCreativeTab(CreativeTabs.FOOD);

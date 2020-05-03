@@ -22,8 +22,8 @@ import ru.veniamin_arefev.disboard.configs.Configs;
 import java.util.List;
 
 public abstract class Box extends Item {
-    private String name;
     public int ID;
+    private String name;
     private TextFormatting nameFormatting;
     private TextFormatting lootFormatting;
 
@@ -39,14 +39,14 @@ public abstract class Box extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand  handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         if (!worldIn.isRemote) {
             LootContext ctx = new LootContext.Builder((WorldServer) worldIn).withLuck(playerIn.getLuck()).build();
             List<ItemStack> stacks = Configs.lootTables.get(ID).generateLootForPools(worldIn.rand, ctx);
             if (!stacks.isEmpty()) {
                 playerIn.getHeldItem(handIn).setCount(playerIn.getHeldItem(handIn).getCount() - 1);
                 playerIn.sendMessage(getMessageForOpener(stacks.get(0)));
-                Utility.anonsForAllExceptPlayer(worldIn.getMinecraftServer(),playerIn,getMessageForOthers(playerIn.getName(),stacks.get(0)));
+                Utility.anonsForAllExceptPlayer(worldIn.getMinecraftServer(), playerIn, getMessageForOthers(playerIn.getName(), stacks.get(0)));
                 playerIn.dropItem(stacks.get(0), false);
             } else {
                 ITextComponent message = new TextComponentTranslation("boxes.box_drop.error");
@@ -55,6 +55,7 @@ public abstract class Box extends Item {
         }
         return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
     }
+
     public TextComponentString getMessageForOpener(ItemStack lootStack) {
         TextComponentString textComponents = Utility.getModCaption();
         ITextComponent temp = new TextComponentTranslation("boxes.box_drop.opener.opened");
@@ -63,7 +64,7 @@ public abstract class Box extends Item {
 
         textComponents.appendSibling(new TextComponentString(" "));
 
-        temp = new TextComponentTranslation("item."+name+".name");
+        temp = new TextComponentTranslation("item." + name + ".name");
         temp.getStyle().setColor(nameFormatting);
         textComponents.appendSibling(temp);
 
@@ -82,7 +83,7 @@ public abstract class Box extends Item {
         return textComponents;
     }
 
-    public TextComponentString getMessageForOthers(String playerName,ItemStack lootStack) {
+    public TextComponentString getMessageForOthers(String playerName, ItemStack lootStack) {
         TextComponentString textComponents = Utility.getModCaption();
         ITextComponent temp = new TextComponentString(playerName + " ");
         temp.getStyle().setColor(TextFormatting.WHITE);
@@ -94,7 +95,7 @@ public abstract class Box extends Item {
 
         textComponents.appendSibling(new TextComponentString(" "));
 
-        temp = new TextComponentTranslation("item."+name+".name");
+        temp = new TextComponentTranslation("item." + name + ".name");
         temp.getStyle().setColor(nameFormatting);
         textComponents.appendSibling(temp);
 

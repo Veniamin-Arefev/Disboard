@@ -9,12 +9,12 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.server.permission.DefaultPermissionLevel;
-import net.minecraftforge.server.permission.PermissionAPI;
 import ru.veniamin_arefev.disboard.configs.Configs;
 import ru.veniamin_arefev.disboard.loot_functions.SetCustomName;
-import ru.veniamin_arefev.disboard.packets.Message;
-import ru.veniamin_arefev.disboard.packets.MessageHandler;
+import ru.veniamin_arefev.disboard.packets.AskClientForUpdateDataMessage;
+import ru.veniamin_arefev.disboard.packets.ClientHashedMessage;
+import ru.veniamin_arefev.disboard.packets.NewConFigsMessage;
+import ru.veniamin_arefev.disboard.packets.UUIDMessage;
 
 import static ru.veniamin_arefev.disboard.Disboard.configs;
 
@@ -24,17 +24,19 @@ public class CommonProxy {
      * This is the first initialization event. Register tile entities here.
      * The registry events below will have fired prior to entry to this method.
      */
+    private static int id = 120;
+
     public void preInit(FMLPreInitializationEvent event) {
-        System.out.println("I am invoked");
-        System.out.println("Now side is " + event.getSide().toString());
-        if (event.getSide().isClient()) {
-            myChannel.registerMessage(MessageHandler.class, Message.class, 0, Side.CLIENT);
-        } else if (event.getSide().isServer()) {
-            myChannel.registerMessage(MessageHandler.class, Message.class, 1, Side.SERVER);
-        }
+        myChannel.registerMessage(UUIDMessage.UUIDMessageHandler.class, UUIDMessage.class, id++, Side.CLIENT);
+        myChannel.registerMessage(AskClientForUpdateDataMessage.AskClientForUpdateDataMessageHandler.class,
+                AskClientForUpdateDataMessage.class, id++, Side.CLIENT);
+        myChannel.registerMessage(ClientHashedMessage.ClientHashedMessageHandler.class, ClientHashedMessage.class,
+                id++, Side.SERVER);
+        myChannel.registerMessage(NewConFigsMessage.NewConFigsMessageHandler.class, NewConFigsMessage.class,
+                id++, Side.CLIENT);
         LootFunctionManager.registerFunction(new SetCustomName.Serializer());
         ItemsRegister.register();
-        configs = new Configs(event.getModConfigurationDirectory(), event.getSide());
+        configs = new Configs(event.getModConfigurationDirectory());
         configs.preInit();
     }
 
@@ -43,7 +45,6 @@ public class CommonProxy {
      */
     public void init(FMLInitializationEvent event) {
         configs.init();
-        PermissionAPI.registerNode("disboard.disboard.base", DefaultPermissionLevel.OP, "Base command permission");
     }
 
     /**

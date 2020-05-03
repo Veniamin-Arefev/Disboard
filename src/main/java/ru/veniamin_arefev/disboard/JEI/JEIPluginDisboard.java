@@ -25,7 +25,7 @@ public class JEIPluginDisboard implements IModPlugin {
     public void register(IModRegistry registry) {
         NonNullList<ItemStack> boxes = NonNullList.create();
         for (String name : lootTablesNames) {
-            boxes.add(new ItemStack(Objects.requireNonNull(Item.getByNameOrId(Disboard.MOD_ID + ":"+name.substring(0,name.indexOf(".")))),1));
+            boxes.add(new ItemStack(Objects.requireNonNull(Item.getByNameOrId(Disboard.MOD_ID + ":" + name.substring(0, name.indexOf(".")))), 1));
         }
         recipes = NonNullList.create();
         boxes.forEach(itemStack -> recipes.add(new BoxRecipeWrapper(itemStack)));

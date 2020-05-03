@@ -6,26 +6,98 @@
       "entries": [
         {
           "type": "item",
-          "name": "minecraft:diamond",
-          "weight": 40
+          "name": "minecraft:coal",
+          "functions": [
+            {
+              "function": "set_custom_name",
+              "name": "§6D§ci§lnosaur ash"
+            }
+          ],
+          "weight": 5
         },
         {
           "type": "item",
-          "name": "minecraft:leather",
-          "weight": 40
-        },
-        {
-          "type": "item",
-          "name": "minecraft:nether_star",
-          "weight": 10
-        },
-        {
-          "type": "item",
-          "name": "minecraft:deadbush",
+          "name": "minecraft:concrete",
           "functions": [
             {
               "function": "set_count",
-              "count": 4
+              "count": 64
+            },
+            {
+              "function": "set_data",
+              "data": 15
+            }
+          ],
+          "weight": 100
+        },
+        {
+          "type": "item",
+          "name": "minecraft:black_glazed_terracotta",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 64
+            }
+          ],
+          "weight": 100
+        },
+        {
+          "type": "item",
+          "name": "minecraft:stained_glass",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 64
+            },
+            {
+              "function": "set_data",
+              "data": 15
+            }
+          ],
+          "weight": 100
+        },
+        {
+          "type": "item",
+          "name": "minecraft:wool",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 64
+            },
+            {
+              "function": "set_data",
+              "data": 15
+            }
+          ],
+          "weight": 100
+        },
+        {
+          "type": "item",
+          "name": "minecraft:banner",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 16
+            },
+            {
+              "function": "set_data",
+              "data": 0
+            }
+          ],
+          "weight": 50
+        },
+        {
+          "type": "item",
+          "name": "minecraft:black_shulker_box",
+          "weight": 25
+        },
+        {
+          "type": "item",
+          "name": "minecraft:bed",
+          "functions": [
+            {
+              "function": "set_data",
+              "data": 15
             }
           ],
           "weight": 50
