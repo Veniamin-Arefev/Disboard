@@ -24,7 +24,7 @@ public class SetCustomName extends LootFunction {
     }
 
     public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
-        stack.setStackDisplayName("§r" + customName);
+        stack.setStackDisplayName(customName);
         return stack;
     }
 

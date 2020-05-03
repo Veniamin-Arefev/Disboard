@@ -15,13 +15,13 @@ import org.apache.logging.log4j.Level;
 import ru.veniamin_arefev.disboard.Disboard;
 import ru.veniamin_arefev.disboard.JEI.BoxRecipeWrapper;
 import ru.veniamin_arefev.disboard.JEI.JEIPluginDisboard;
+import ru.veniamin_arefev.disboard.Utility;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
@@ -79,12 +79,15 @@ public class Configs {
         lootTables.clear();
         try {
             LootTableManager manager = new LootTableManager(File.createTempFile("disboard", "temp"));
+            int i = 0;
             for (File file : filesList) {
-                String data = com.google.common.io.Files.toString(file, StandardCharsets.UTF_8);
+                String data = Utility.readJson(file.getAbsolutePath());
                 lootTables.add(ForgeHooks.loadLootTable(GSON_INSTANCE, new ResourceLocation(file.getName()), data, true, manager));
             }
-            if (JEIPluginDisboard.recipes != null && !JEIPluginDisboard.recipes.isEmpty()) {
-                JEIPluginDisboard.recipes.forEach(BoxRecipeWrapper::init);
+            if (Disboard.isJEILoaded) {
+                if (!JEIPluginDisboard.recipes.isEmpty()) {
+                    JEIPluginDisboard.recipes.forEach(BoxRecipeWrapper::init);
+                }
             }
             return true;
         } catch (IOException e) {

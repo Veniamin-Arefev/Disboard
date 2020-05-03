@@ -10,6 +10,10 @@ import net.minecraft.util.text.TextFormatting;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 
@@ -35,6 +39,15 @@ public abstract class Utility {
         temp.getStyle().setColor(TextFormatting.DARK_BLUE);
         textComponents.appendSibling(temp);
         return textComponents;
+    }
+
+    public static String readJson(String fileName) {
+        try {
+            return new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            Disboard.logger.error("Failed to read text file into String", e.fillInStackTrace());
+            return "";
+        }
     }
 
     public static String checksum(File file) {

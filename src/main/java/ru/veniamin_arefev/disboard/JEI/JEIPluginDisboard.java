@@ -23,6 +23,7 @@ public class JEIPluginDisboard implements IModPlugin {
 
     @Override
     public void register(IModRegistry registry) {
+        Disboard.isJEILoaded = true;
         NonNullList<ItemStack> boxes = NonNullList.create();
         for (String name : lootTablesNames) {
             boxes.add(new ItemStack(Objects.requireNonNull(Item.getByNameOrId(Disboard.MOD_ID + ":" + name.substring(0, name.indexOf(".")))), 1));
@@ -40,6 +41,5 @@ public class JEIPluginDisboard implements IModPlugin {
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-
     }
 }

@@ -20,7 +20,7 @@ public class Disboard {
 
     public static final String MOD_ID = "disboard";
     public static final String MOD_NAME = "Disboard";
-    public static final String VERSION = "1.000-RELEASE";
+    public static final String VERSION = "1.010-RELEASE";
     public static final CreativeTabs boxTab = new BoxTab("Boxes_tab");
     public static Logger logger;
     public static Configs configs;
@@ -28,6 +28,8 @@ public class Disboard {
     public static Disboard INSTANCE;
     @SidedProxy(clientSide = "ru.veniamin_arefev.disboard.ClientProxy", serverSide = "ru.veniamin_arefev.disboard.CommonProxy")
     public static CommonProxy proxy;
+
+    public static boolean isJEILoaded = false;
 
     @Mod.EventHandler
     public static void serverLoading(FMLServerStartingEvent event) { //server starting only
