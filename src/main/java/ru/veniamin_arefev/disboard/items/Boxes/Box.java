@@ -2,6 +2,7 @@ package ru.veniamin_arefev.disboard.items.Boxes;
 // Created by Veniamin_arefev
 // Date was 23.09.2018
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,6 +13,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
@@ -46,7 +48,7 @@ public abstract class Box extends Item {
             if (!stacks.isEmpty()) {
                 playerIn.getHeldItem(handIn).setCount(playerIn.getHeldItem(handIn).getCount() - 1);
                 playerIn.sendMessage(getMessageForOpener(stacks.get(0)));
-                Utility.anonsForAllExceptPlayer(worldIn.getMinecraftServer(), playerIn, getMessageForOthers(playerIn.getName(), stacks.get(0)));
+                Utility.anonsForAllExceptPlayer(worldIn.getMinecraftServer(), playerIn, getMessageForOthers(playerIn.getDisplayName(), stacks.get(0)));
                 playerIn.dropItem(stacks.get(0), false);
             } else {
                 ITextComponent message = new TextComponentTranslation("boxes.box_drop.error");
@@ -56,60 +58,60 @@ public abstract class Box extends Item {
         return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
     }
 
-    public TextComponentString getMessageForOpener(ItemStack lootStack) {
+    private TextComponentString getMessageForOpener(ItemStack lootStack) {
         TextComponentString textComponents = Utility.getModCaption();
         ITextComponent temp = new TextComponentTranslation("boxes.box_drop.opener.opened");
         temp.getStyle().setColor(TextFormatting.GREEN);
         textComponents.appendSibling(temp);
 
-        textComponents.appendSibling(new TextComponentString(" "));
+        textComponents.appendSibling(getMessageEnding(lootStack));
 
-        temp = new TextComponentTranslation("item." + name + ".name");
+        return textComponents;
+    }
+
+    private TextComponentString getMessageForOthers(ITextComponent playerName, ItemStack lootStack) {
+        TextComponentString textComponents = Utility.getModCaption();
+        textComponents.appendSibling(playerName);
+
+        ITextComponent temp = new TextComponentTranslation("boxes.box_drop.other.opened");
+        temp.getStyle().setColor(TextFormatting.GREEN);
+        textComponents.appendSibling(temp);
+
+        textComponents.appendSibling(getMessageEnding(lootStack));
+
+        return textComponents;
+    }
+
+    private TextComponentString getMessageEnding(ItemStack lootStack) {
+        TextComponentString textComponents = new TextComponentString(" ");
+        ITextComponent temp = new TextComponentTranslation("item." + name + ".name");
         temp.getStyle().setColor(nameFormatting);
         textComponents.appendSibling(temp);
 
         textComponents.appendSibling(new TextComponentString(" "));
 
         temp = new TextComponentTranslation("boxes.box_drop.and_got");
-        temp.getStyle().setColor(TextFormatting.YELLOW);
-        textComponents.appendSibling(temp);
-
-        textComponents.appendSibling(new TextComponentString(" "));
-
-        temp = lootStack.getTextComponent();
-        temp.getStyle().setColor(lootFormatting).setUnderlined(true);
-        textComponents.appendSibling(temp);
-
-        return textComponents;
-    }
-
-    public TextComponentString getMessageForOthers(String playerName, ItemStack lootStack) {
-        TextComponentString textComponents = Utility.getModCaption();
-        ITextComponent temp = new TextComponentString(playerName + " ");
-        temp.getStyle().setColor(TextFormatting.WHITE);
-        textComponents.appendSibling(temp);
-
-        temp = new TextComponentTranslation("boxes.box_drop.other.opened");
         temp.getStyle().setColor(TextFormatting.GREEN);
         textComponents.appendSibling(temp);
 
         textComponents.appendSibling(new TextComponentString(" "));
 
-        temp = new TextComponentTranslation("item." + name + ".name");
-        temp.getStyle().setColor(nameFormatting);
-        textComponents.appendSibling(temp);
-
-        textComponents.appendSibling(new TextComponentString(" "));
-
-        temp = new TextComponentTranslation("boxes.box_drop.and_got");
-        temp.getStyle().setColor(TextFormatting.YELLOW);
-        textComponents.appendSibling(temp);
-
-        textComponents.appendSibling(new TextComponentString(" "));
-
-        temp = lootStack.getTextComponent();
-        temp.getStyle().setColor(lootFormatting).setUnderlined(true);
-        textComponents.appendSibling(temp);
+        if (I18n.format(lootStack.getTranslationKey() + ".name").equals(lootStack.getDisplayName())) {
+            //its not custom name
+            temp = new TextComponentString("[");
+            temp.getStyle().setColor(lootFormatting);
+            textComponents.appendSibling(temp);
+            temp = new TextComponentTranslation(lootStack.getTranslationKey() + ".name");
+            HoverEvent hoverEvent = lootStack.getTextComponent().getStyle().getHoverEvent();
+            temp.getSiblings().forEach(iTextComponent -> iTextComponent.getStyle().setHoverEvent(hoverEvent));
+            temp.getStyle().setColor(lootFormatting).setHoverEvent(hoverEvent);
+            textComponents.appendSibling(temp);
+            temp = new TextComponentString("]");
+            temp.getStyle().setColor(lootFormatting);
+            textComponents.appendSibling(temp);
+        } else {
+            textComponents.appendSibling(lootStack.getTextComponent());
+        }
 
         return textComponents;
     }

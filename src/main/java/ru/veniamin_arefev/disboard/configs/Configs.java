@@ -11,7 +11,6 @@ import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.ForgeHooks;
-import org.apache.logging.log4j.Level;
 import ru.veniamin_arefev.disboard.Disboard;
 import ru.veniamin_arefev.disboard.JEI.BoxRecipeWrapper;
 import ru.veniamin_arefev.disboard.JEI.JEIPluginDisboard;
@@ -169,9 +168,9 @@ public class Configs {
             Stream<Path> walk = Files.walk(defaultsPath, 1);
             List<String> fileNames = NonNullList.create();
             for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
-                String name = it.next().getFileName().toString();
-                if (name.contains(".json")) {
-                    fileNames.add(name);
+                File file = it.next().toFile();
+                if (file.isFile()) {
+                    fileNames.add(file.getName());
                 }
             }
 
@@ -179,7 +178,7 @@ public class Configs {
                 try {
                     Files.copy(this.getClass().getClassLoader().getResourceAsStream("assets/disboard/loot_tables/boxes/" + fileName), configPath.resolve(fileName));
                 } catch (FileAlreadyExistsException e) {
-                    Disboard.logger.log(Level.DEBUG, fileName + " already exists");
+                    Disboard.logger.debug(fileName + " already exists");
                 }
             }
 
