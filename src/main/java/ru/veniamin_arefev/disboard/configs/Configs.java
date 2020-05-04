@@ -168,9 +168,9 @@ public class Configs {
             Stream<Path> walk = Files.walk(defaultsPath, 1);
             List<String> fileNames = NonNullList.create();
             for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
-                File file = it.next().toFile();
-                if (file.isFile()) {
-                    fileNames.add(file.getName());
+                String name = it.next().getFileName().toString();
+                if (name.contains(".")) {
+                    fileNames.add(name);
                 }
             }
 

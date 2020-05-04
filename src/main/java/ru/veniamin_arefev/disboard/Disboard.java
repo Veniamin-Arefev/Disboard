@@ -20,7 +20,7 @@ public class Disboard {
 
     public static final String MOD_ID = "disboard";
     public static final String MOD_NAME = "Disboard";
-    public static final String VERSION = "1.020-RELEASE";
+    public static final String VERSION = "1.025-RELEASE";
     public static final CreativeTabs boxTab = new BoxTab("Boxes_tab");
     public static Logger logger;
     public static Configs configs;
