@@ -1,16 +1,18 @@
 [
-    {
-        "modid": "Disboard",
-        "name": "Disboard",
-        "description": "This mod brings few items and a lot of misc staff.",
-        "version": "${version}",
-        "mcversion": "${mcversion}",
-        "url": "disboard.su",
-        "updateUrl": "",
-        "authorList": ["Veniamin_arefev"],
-        "credits": "Thank all my friend at Forge community for helping",
-        "logoFile": "",
-        "screenshots": [],
-        "dependencies": []
-    }
+  {
+    "modid": "disboard",
+    "name": "Disboard",
+    "description": "This mod brings few items and a lot of misc staff.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://disboard.su",
+    "updateUrl": "",
+    "authorList": [
+      "Veniamin_arefev"
+    ],
+    "credits": "Thank all my friend at Forge community for helping",
+    "logoFile": "logo.png",
+    "screenshots": [],
+    "dependencies": []
+  }
 ]
